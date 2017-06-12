@@ -15,6 +15,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/px-map/px-map-tile-layer-bing.html">
 <link rel="import" href="../bower_components/px-map/px-map-layer-geojson.html">
 <link rel="import" href="../bower_components/px-map/px-map-control-zoom.html">
+<link rel="import" href="../bower_components/px-widget-cards/px-twoup.html"/>
+<link rel="import" href="../bower_components/px-toggle/px-toggle.html"/>
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-view2">
@@ -27,15 +29,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 <px-view-header title="My Station" subtitle="Do we need one?"></px-view-header>
-<div style="height:400px;width:600px;display:flex"><px-map zoom="8" lat="37.7749" lng="-122.4312" flex-to-size="true" disable-scroll-zoom="true" disable-touch-zoom="true"><px-map-tile-layer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'></px-map></div>
 
-    <div class="card">
-      <div class="circle">2</div>
-      <h1>View Two</h1>
-
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-      <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
+<px-twoup id="widget-2" widget-header="2 Widget Card" widget-icon="fa-paper-plane">
+    <div class='widget-1'>
+      <span>
+        <px-toggle size="regular (default)" checked="true"></px-toggle>
+      </span>
     </div>
+    <!--Need to foruce bottom line here, as looks naff only going one accross -->
+    <div class='widget-2'>
+      <span>
+        <div style="height:400px;width:600px;display:flex"><px-map zoom="8" lat="37.7749" lng="-122.4312" flex-to-size="true" disable-scroll-zoom="true" disable-touch-zoom="true"><px-map-tile-layer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'></px-map></div>
+      </span>
+    </div>
+  </px-twoup>
+
+  <px-twoup id="widget-2" widget-header="2 Widget Card" widget-icon="fa-paper-plane">
+      <div class='widget-1'>
+        <span>
+          Personal Reservation Schedule
+        </span>
+      </div>
+      <!--Need to foruce bottom line here, as looks naff only going one accross -->
+      <div class='widget-2'>
+        <span>
+        Personal Reservation Schedule
+        </span>
+      </div>
+    </px-twoup>
+
+
   </template>
 
   <script>
