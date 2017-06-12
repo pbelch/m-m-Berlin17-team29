@@ -28,7 +28,8 @@
     "px-card": "https://github.com/PredixDev/px-card.git#^0.7.1",
     "px-simple-bar-chart": "^1.9.1",
     "px-gauge": "^1.0.2",
-    "px-modal": "https://github.com/PredixDev/px-modal.git#^1.4.10"
+    "px-modal": "https://github.com/PredixDev/px-modal.git#^1.4.10",
+    "px-data-table": "https://github.com/PredixDev/px-data-table.git#^3.0.2"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
@@ -36,6 +37,7 @@
   "private": true,
   "resolutions": {
     "pxd3": "^4.7.0",
-    "px-vis": "~1.1.0"
+    "px-vis": "~1.1.0",
+    "app-localize-behavior": "^1.0.2"
   }
 }
