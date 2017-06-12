@@ -1,0 +1,89 @@
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/px-modal/px-modal.html"/>
+<link rel="import" href="/bower_components/px-card/px-card.html"/>
+<link rel="import" href="../bower_components/iron-form/iron-form.html"/>
+<link rel="import" href="../bower_components/paper-button/paper-button.html"/>
+<link rel="import" href="../bower_components/paper-input/paper-input.html"/>
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<dom-module id="my-booking">
+  <template>
+  <style include="shared-styles">
+    :host {
+      display: block;
+      padding: 10px;
+    },
+  </style>
+
+  <app-location route="{{route}}" ></app-location>
+  <app-route
+      route="{{route}}"
+      pattern="/:page"
+      data="{{routeData}}"
+      tail="{{subroute}}">
+  </app-route>
+
+  <iron-ajax
+      id= "writeBookingReservation"
+      handle-as="json"
+      content-type="application/json"
+      on-response="bookingCompleted"
+      on-error= "bookingError"
+      method="POST" >
+  </iron-ajax>
+
+  <px-card header-text="Confirm Reservation" icon="fa-fort-awesome">
+    <p>Please confirm your reservation by specifing a time and date:</p>
+      <p>
+        <form is="iron-form" id="submitOptions">
+          <paper-input id ="bookingStartTime" label="Start Date/Time" required></paper-input>
+          <paper-input id ="bookingEndTime" label="End Date/Time" required></paper-input>
+        </form>
+        <div class="buttons">
+          <paper-button dialog-confirm autofocus on-tap="makeReservation">Confirm Reservation</paper-button>
+        </div>
+      </p>
+    </px-card>
+
+<a id="loginRedirect" name="login" href="/station"></a>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'my-booking',
+      properties: {
+        stop_id : String
+      },
+      attached: function() {
+        var path = this.subroute.path;
+         path = path.replace('/', '');
+         this.stop_id = path;
+      if (path===""){
+         //Where no path, redirect to home view
+         this.$.loginRedirect.click();
+       };
+      },
+      makeReservation: function(){
+        if (this.$.submitOptions.validate()) {
+       var postURL = "https://hackathon-booking-database.run.aws-usw02-pr.ice.predix.io/database/booking";
+       var measureAjax = this.$.writeBookingReservation;
+       measureAjax.url = postURL;
+       measureAjax.body = {"station_id":this.stop_id, "from":this.$.bookingStartTime.value, "to":this.$.bookingEndTime.value, "user_id":"jeff"};
+       measureAjax.generateRequest();
+         } else {
+        this.fire('missingInput');
+       }
+     },
+     bookingError : function(){
+        this.fire('bookingError');
+      },
+      bookingCompleted : function () {
+        console.log ("SUCCESSS");
+        this.fire ('bookingCompleted');
+        this.$.loginRedirect.click();
+      }
+    });
+  </script>
+</dom-module>

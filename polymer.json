@@ -6,7 +6,8 @@
     "src/my-station.html",
     "src/my-view3.html",
     "src/my-view4.html",
-    "src/my-view404.html"
+    "src/my-view404.html",
+    "src/my-booking.html"
   ],
   "sourceGlobs": [
     "src/**/*",

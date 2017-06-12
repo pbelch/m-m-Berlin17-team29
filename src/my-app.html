@@ -77,6 +77,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <a name="station" href="/station">My Station</a>
           <a name="view3" href="/view3">My Vehicle</a>
           <a name="view5" href="/view5">Grid View</a>
+          <a name="booking" href="/booking"></a>
         </iron-selector>
       </app-drawer>
 
@@ -101,10 +102,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <my-view4 name="view4"></my-view4>
           <my-view404 name="view404"></my-view404>
           <my-view5 name="view5"></my-view5>
+          <my-booking name="booking"></my-booking>
 
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
+    <paper-toast id="toastSuccess" text="Awesome! Weve made a note of your reservation"></paper-toast>
+<paper-toast id="toastError" text="Uh oh! It didnt work? Please try again in a little while"></paper-toast>
+<paper-toast id="missingInput" text="Please complete all required fields to continue"></paper-toast>
   </template>
 
   <script>
@@ -122,6 +127,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       observers: [
         '_routePageChanged(routeData.page)',
       ],
+      listeners: {
+        'bookingCompleted': 'bookingCompleted',
+        'bookingError': 'bookingError',
+        'missingInput': 'missingInput'
+      },
+  bookingError: function () {
+this.$.toastError.open();
+  },
+  bookingCompleted: function () {
+this.$.toastSuccess.open();
+  },
+  missingInput: function () {
+this.$.missingInput.open();
+  },
 
       _routePageChanged: function(page) {
         this.page = page || 'view4';
