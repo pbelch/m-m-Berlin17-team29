@@ -23,7 +23,8 @@
     "px-widget-cards": "^2.3.2",
     "px-vis-pie-chart": "^1.1.0",
     "px-simple-horizontal-bar-chart": "^0.8.5",
-    "px-polymer-font-awesome": "^1.1.5"
+    "px-polymer-font-awesome": "^1.1.5",
+    "px-modal": "https://github.com/PredixDev/px-modal.git#^1.4.10"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
