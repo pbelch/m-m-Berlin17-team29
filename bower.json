@@ -24,6 +24,8 @@
     "px-vis-pie-chart": "^1.1.0",
     "px-simple-horizontal-bar-chart": "^0.8.5",
     "px-polymer-font-awesome": "^1.1.5",
+    "px-modal": "https://github.com/PredixDev/px-modal.git#^1.4.10",
+
     "px-toggle": "^1.0.5",
     "px-card": "https://github.com/PredixDev/px-card.git#^0.7.1",
     "px-simple-bar-chart": "^1.9.1",

@@ -3,6 +3,10 @@
 <link rel="import" href="../bower_components/px-map/px-map-tile-layer-bing.html">
 <link rel="import" href="../bower_components/px-map/px-map-layer-geojson.html">
 <link rel="import" href="../bower_components/px-map/px-map-control-zoom.html">
+<link rel="import" href="../bower_components/px-map/px-map-marker-static.html">
+<link rel="import" href="../bower_components/px-map/px-map-marker-symbol.html">
+<link rel="import" href="../bower_components/px-map/px-map-popup-info.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/px-modal/px-modal.html"/>
 
@@ -19,15 +23,26 @@
             <div id="ajax">
 
             </div>
+            <paper-icon-button icon="fa fa-briefcase" on-tap="openModal" title="Book Charge"></paper-icon-button>
+            <px-modal id="bookChargeModal" btn-modal-positive="Continue" btn-modal-negative="Back" modal-heading="Sign-in required">
+                <p>
+                  <b>Please sign-in to access this part of the application.</b>
+                </p>
+                <p>Lorem ipsum</p>
+            </px-modal>
 
             <px-map id="worldMap" zoom="15" lat="53.289274411765973" lng="-6.253227258892083" flex-to-size="true" max-zoom="21">
                 <px-map-tile-layer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'></px-map-tile-layer>
                 <px-map-control-zoom position="bottomright"></px-map-control-zoom>
+
             </px-map>
 
         </template>
 
         <script>
+
+
+
           Polymer({
             is: 'my-view4',
             properties: {
@@ -57,14 +72,12 @@
                   },
                   "MV_Underground_Ground_Mounted_Asset": {
                     color: '#ff0000'
-                  },
-                  "stations": {
-                    color: '#ff0000'
                   }
                 }
               }
             },
-            attached: function() {
+
+            getMapData: function() {
               var collections = Object.keys(this.styles);
               //var parent = Polymer.dom(this).querySelector('#ajax');
               var parent = this.$.ajax;
@@ -85,6 +98,53 @@
                 ajaxCaller.generateRequest();
               }
             },
+            getStationData: function() {
+              var parent = this.$.ajax;
+              console.log ("PARENT NEXT");
+              console.log (parent);
+
+              var ajaxCaller;
+              ajaxCaller = document.createElement('iron-ajax');
+              ajaxCaller.url = 'https://mmeurope-ui-intelligent-mapping-team29.run.aws-usw02-pr.ice.predix.io/api/v1/collections/stations';
+              //ajaxCaller.url = '/api/v1/collections/' + collections[i];
+              ajaxCaller.id = 'stations';
+              ajaxCaller.method = 'GET';
+              this.listen(ajaxCaller, 'response', 'generateMapMarkers');
+              this.listen(ajaxCaller, 'error', 'reportError');
+              console.log (ajaxCaller);
+              parent.appendChild(ajaxCaller);
+              ajaxCaller.generateRequest();
+            },
+
+            attached: function() {
+              this.getMapData();
+              this.getStationData();
+            },
+
+            generateMapMarkers: function(data) {
+              var map = this.$.worldMap;
+              var response = data.detail.response;
+              console.log(response);
+              for (var i=0; i<response.features.length; ++i){
+                var feature = response.features[i];
+                  var marker = document.createElement('px-map-marker-symbol');
+                  marker.lat = JSON.stringify(feature.geometry.coordinates[1]);
+                  marker.lng = JSON.stringify(feature.geometry.coordinates[0]);
+                  console.log(marker);
+                  marker.symbolClass = 'fa fa-briefcase';
+                  var info = document.createElement('px-map-popup-info');
+                  info.title = 'Charging Station';
+                  info.description = 'FUCK THIS SHIT';
+                  marker.appendChild(info);
+                  map.appendChild(marker);
+              }
+            },
+            openModal: function() {
+              console.log("fired");
+              this.$.bookChargeModal.modalButtonClicked();
+              // Polymer.dom(document).querySelector("#bookChargeModal").modalButtonClicked();
+            },
+
             addLayer: function(evt) {
               console.log('Adding layer ', evt.target.id);
               //var map = this.querySelector('px-map');
