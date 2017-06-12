@@ -69,7 +69,7 @@
           marker.symbolClass = 'fa fa-briefcase';
           var info = document.createElement('px-map-popup-info');
           info.title = feature.properties.customer_name + "'s Drive";
-          info.description='<div id="bookChargeModal">'+ feature.properties.street_address + '<br/><a href="http://localhost:3001/booking/' + id + '">Book Now</a></div>';
+          info.description='<div id="bookChargeModal">'+ feature.properties.street_address + '<br/><a href="https://charge.run.aws-usw02-pr.ice.predix.io/booking/' + id + '">Book Now</a></div>';
           marker.appendChild(info);
           map.appendChild(marker);
         }
