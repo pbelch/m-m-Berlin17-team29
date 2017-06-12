@@ -29,7 +29,8 @@
     "px-simple-bar-chart": "^1.9.1",
     "px-gauge": "^1.0.2",
     "px-modal": "https://github.com/PredixDev/px-modal.git#^1.4.10",
-    "px-data-table": "https://github.com/PredixDev/px-data-table.git#^3.0.2"
+    "px-data-table": "https://github.com/PredixDev/px-data-table.git#^3.0.2",
+    "px-timeline": "^0.3.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
