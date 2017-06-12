@@ -73,7 +73,8 @@
               var ajaxCaller;
               for (var i = 0; i < collections.length; i++) {
                 ajaxCaller = document.createElement('iron-ajax');
-                ajaxCaller.url = '/api/v1/collections/' + collections[i];
+                ajaxCaller.url = 'https://mmeurope-ui-intelligent-mapping-team29.run.aws-usw02-pr.ice.predix.io/api/v1/collections/' + collections[i];
+                //ajaxCaller.url = '/api/v1/collections/' + collections[i];
                 ajaxCaller.id = collections[i];
                 ajaxCaller.method = 'GET';
                 this.listen(ajaxCaller, 'response', 'addLayer');
@@ -88,6 +89,9 @@
               //var map = this.querySelector('px-map');
               var map = this.$.worldMap;
               var item = document.createElement('px-map-layer-geojson');
+              ///
+
+              //
               item.data = evt.detail.response;
               item.featureStyle = this.styles[evt.target.id];
               item.showFeatureProperties = true;

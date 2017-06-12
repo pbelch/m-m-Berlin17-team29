@@ -3,7 +3,7 @@
 const express = require('express');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 const imsMiddleware = require('ims-service-utils').imsMiddleware;
 const path = require('path');
 
@@ -21,7 +21,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.use('/api', imsMiddleware(props),);
+app.use('/api', imsMiddleware(props));
 
 app.use(express.static(__dirname))
 app.get('*', (req, res) => {

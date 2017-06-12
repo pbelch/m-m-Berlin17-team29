@@ -1,7 +1,7 @@
 module.exports = function(express){
   var router = express.Router();
 
-  router.get('/part/*/parameters', function(req, res){
+  router.get('*', function(req, res){
     var testParams = [
       {
         "name": "Good Reciving",

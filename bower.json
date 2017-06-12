@@ -18,13 +18,19 @@
     "px-theme": "^2.0.4",
     "px-map": "^1.4.5",
     "px-kpi": "^1.0.0",
-    "iron-ajax": "^1.4.3"
+    "iron-ajax": "^1.4.3",
+    "px-view-header": "^0.2.5",
+    "px-widget-cards": "^2.3.2",
+    "px-vis-pie-chart": "^1.1.0",
+    "px-simple-horizontal-bar-chart": "^0.8.5",
+    "px-polymer-font-awesome": "^1.1.5"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
   },
   "private": true,
   "resolutions": {
-    "pxd3": "^4.7.0"
+    "pxd3": "^4.7.0",
+    "px-vis": "~1.1.0"
   }
 }

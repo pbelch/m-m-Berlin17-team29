@@ -10,6 +10,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/px-kpi/px-kpi.html"/>
+<link rel="import" href="../bower_components/px-view-header/px-view-header.html"/>
+<link rel="import" href="../bower_components/px-widget-cards/px-twoup.html"/>
+<link rel="import" href="../bower_components/px-vis-pie-chart/px-vis-pie-chart.html"/>
+<link rel="import" href="../bower_components/px-simple-horizontal-bar-chart/px-simple-horizontal-bar-chart.html"/>
+<link rel="import" href="../bower_components/px-polymer-font-awesome/px-polymer-font-awesome.html"/>
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-view1">
@@ -21,6 +26,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 10px;
       }
     </style>
+    <px-view-header title="My Account" subtitle="Do we need one?"></px-view-header>
+    <!-- PUT SOME GREY HERE. MABE BOTTOM BORDER. SEPERATE FROM WIDGET CARDS -->
+    <px-twoup id="widget-2" widget-header="2 Widget Card" widget-icon="fa-paper-plane">
+        <div class='widget-1'>
+          <span>
+            echo$ Balance: $200.56<br/>
+            echo$ Earned this Month $20.78<br/>
+            echo$ Spent this month $40.26
+          </span>
+        </div>
+        <!--Need to foruce bottom line here, as looks naff only going one accross -->
+        <div class='widget-2'>
+          <span>
+            Charging Stations Owned: 1<br/>
+            Electric Vehicles Registered: 1
+          </span>
+        </div>
+      </px-twoup>
+      <px-twoup id="widget-2" widget-header="2 Widget Card" widget-icon="fa-paper-plane">
+          <div class='widget-1'>
+            <span>
+              <px-vis-pie-chart prevent-resize="true" width="450" height="450" chart-horizontal-alignment="center" chart-vertical-alignment="center" margin='{"top":"10","bottom":"10","left":"0","right":"0"}' register-config='{"type":"vertical","width":200}' chart-data='[{"percentage":"26","x":15,"y":"IPA"},{"percentage":"2","x":1,"y":"Pils"},{"percentage":"2","x":1,"y":"Lager"},{"percentage":"14","x":8,"y":"Lambic"},{"percentage":"21","x":12,"y":"Stout"},{"percentage":"12","x":7,"y":"Pale {Ale"},{"percentage":"16","x":9,"y":"Porter"},{"percentage":"7","x":4,"y":"Heffeweisse"}]' series-config='{"mySerie":{"xAxisUnit":"pints","y":"y","x":"x"}}' title="Total" title-spacing="5" dynamic-menu-config='[{"name":"Log message","action":"function(data) {console.log(\"logging message\")}","eventName":"delete","icon":"fa-trash"}]'></px-vis-pie-chart>
+            </span>
+          </div>
+          <div class='widget-2'>
+            <span>
+              <!--scaling on this component is a bit rubbish. Maybe use a difference one -->
+              <px-simple-horizontal-bar-chart width="auto" height="auto" bar-labels="percentage" legend-labels='["Bar One","Bar Two","Bar Three","Bar Four","Bar Five","Bar Six"]' chart-data='[29,20,15,18,8,10]'></px-simple-horizontal-bar-chart>
+            </span>
+          </div>
+        </px-twoup>
 
     <div class="card">
       <div class="circle">1</div>
