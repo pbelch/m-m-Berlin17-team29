@@ -9,7 +9,9 @@
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/px-modal/px-modal.html"/>
-
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <dom-module id="my-view4">
         <template>
             <style>
@@ -24,12 +26,7 @@
 
             </div>
             <paper-icon-button icon="fa fa-briefcase" on-tap="openModal" title="Book Charge"></paper-icon-button>
-            <px-modal id="bookChargeModal" btn-modal-positive="Continue" btn-modal-negative="Back" modal-heading="Sign-in required">
-                <p>
-                  <b>Please sign-in to access this part of the application.</b>
-                </p>
-                <p>Lorem ipsum</p>
-            </px-modal>
+
 
             <px-map id="worldMap" zoom="15" lat="53.289274411765973" lng="-6.253227258892083" flex-to-size="true" max-zoom="21">
                 <px-map-tile-layer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'></px-map-tile-layer>
@@ -37,15 +34,34 @@
 
             </px-map>
 
+            <paper-dialog id="newMeasurementModal" modal>
+    <h2>Record Measurement</h2>
+    <form is="iron-form" id="submitOptions">
+      <paper-input id ="measurePetId" label="Pet Name" value="{{selectedPetName}}"  disabled></paper-input>
+      <paper-input id ="measurePetHeight" type="number" label="Height (Measured in {{selectedHeight}})"></paper-input>
+      <paper-input id ="measurePetWeight" type="number" label="Weight (Measured in {{selectedWeight}})"></paper-input>
+      <paper-input id ="measurePetLength" type="number" label="Length (Measured in {{selectedHeight}})"></paper-input>
+      <br>
+    </form>
+    <div class="buttons">
+      <paper-button dialog-dismiss>Cancel</paper-button>
+      <paper-button dialog-confirm autofocus on-tap="processNewReading">Add</paper-button>
+    </div>
+</paper-dialog>
+
+
+
         </template>
 
         <script>
 
-
-
           Polymer({
             is: 'my-view4',
             properties: {
+              selectedName : {
+                type: String,
+                value : "NAME HERE"
+              },
               styles: {
                 type: Object,
                 value: {
@@ -76,6 +92,9 @@
                 }
               }
             },
+            listeners: {
+        'myFunction': 'myFunction'
+      },
 
             getMapData: function() {
               var collections = Object.keys(this.styles);
@@ -116,9 +135,11 @@
               ajaxCaller.generateRequest();
             },
 
+
             attached: function() {
               this.getMapData();
               this.getStationData();
+              //this.$.bookChargeModal.addEventListener("click", openModal);
             },
 
             generateMapMarkers: function(data) {
@@ -130,19 +151,34 @@
                   var marker = document.createElement('px-map-marker-symbol');
                   marker.lat = JSON.stringify(feature.geometry.coordinates[1]);
                   marker.lng = JSON.stringify(feature.geometry.coordinates[0]);
-                  console.log(marker);
+                  marker.onClick = "openModal";
+                  console.log(feature);
+                  var id = feature.id;
+                  //console.log (id);
                   marker.symbolClass = 'fa fa-briefcase';
                   var info = document.createElement('px-map-popup-info');
-                  info.title = 'Charging Station';
-                  info.description = 'FUCK THIS SHIT';
+
+                  info.title = feature.properties.customer_name + "'s Drive";
+                  //info.description = '<px-modal id="bookChargeModal" btn-modal-positive="Continue" btn-modal-negative="Back" modal-heading="Reserve Space"><button class="btn btn--primary modal-trigger">Open Modal</button><p><b></b></p><p>Lorem ipsum</p></px-modal>';
+  info.description='<div id="bookChargeModal">'+ feature.properties.street_address + '<br/><a href="http://localhost:3001/station/' + id + '">Book Now</a></div>';
                   marker.appendChild(info);
                   map.appendChild(marker);
               }
             },
+
             openModal: function() {
-              console.log("fired");
-              this.$.bookChargeModal.modalButtonClicked();
+              //this.$.newMeasurementModal.open();
+              console.log ("TEST");
+
+            //  console.log("fired");
+            //  alert('Search clicked');
+
+              //this.$.bookChargeModal.modalButtonClicked();
+
               // Polymer.dom(document).querySelector("#bookChargeModal").modalButtonClicked();
+            },
+            myFunction: function() {
+              alert("he clicked me :)");
             },
 
             addLayer: function(evt) {
@@ -150,9 +186,6 @@
               //var map = this.querySelector('px-map');
               var map = this.$.worldMap;
               var item = document.createElement('px-map-layer-geojson');
-              ///
-
-              //
               item.data = evt.detail.response;
               item.featureStyle = this.styles[evt.target.id];
               item.showFeatureProperties = true;
