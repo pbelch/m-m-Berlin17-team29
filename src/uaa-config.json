@@ -1,0 +1,21 @@
+{
+  "local":{
+  "clientID": "hackathontester",
+   "clientSecret": "hackathontester",
+   "baseUrl": "http://localhost:3000",
+   "redirectUri": "http://localhost:3000/redirect",
+   "cookieName": "test_for_hackathon_3",
+   "cookieSecret": "test_for_hackathon_3",
+   "sessionSecret": "test_for_hackathon_3",
+   "backendapi": "https://my-backend-api.com"
+ },
+ "prod":{
+   "clientID": "hackathontester",
+    "clientSecret": "hackathontester",
+    "baseUrl": "http://localhost:3000",
+    "redirectUri": "http://localhost:3000/redirect",
+    "cookieName": "test_for_hackathon_3",
+    "cookieSecret": "test_for_hackathon_3",
+    "sessionSecret": "test_for_hackathon_3"
+ }
+}

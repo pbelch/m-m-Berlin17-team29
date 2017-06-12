@@ -1,48 +1,30 @@
 {
-  "name": "ge__app",
-  "version": "0.1.0",
-  "private": true,
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "public/bower_components",
-    "test",
-    "tests",
-    "target",
-    "test-target",
-    "sass"
+  "name": "polymer-starter-kit",
+  "authors": [
+    "The Polymer Authors"
   ],
+  "license": "https://polymer.github.io/LICENSE.txt",
   "dependencies": {
-    "app-route": "PolymerElements/app-route#0.9.x",
-    "polymer": "1.8.x",
-    "px-app-nav": "1.10.x",
-    "px-view": "1.1.x",
-    "px-card": "0.7.x",
-    "px-view-header": "0.2.x",
-    "iron-ajax": "1.4.x",
-    "lodash": "4.16.x",
-    "px-dropdown": "3.1.x",
-    "px-vis-timeseries": "^1.1.4"
+    "app-layout": "PolymerElements/app-layout#^0.10.0",
+    "app-route": "PolymerElements/app-route#^0.9.0",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0",
+    "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^1.0.0",
+    "iron-localstorage": "PolymerElements/iron-localstorage#^1.0.0",
+    "iron-media-query": "PolymerElements/iron-media-query#^1.0.0",
+    "iron-pages": "PolymerElements/iron-pages#^1.0.0",
+    "iron-selector": "PolymerElements/iron-selector#^1.0.0",
+    "paper-icon-button": "PolymerElements/paper-icon-button#~1.1.0",
+    "polymer": "Polymer/polymer#^1.6.0",
+    "px-theme": "^2.0.4",
+    "px-map": "^1.4.5",
+    "px-kpi": "^1.0.0",
+    "iron-ajax": "^1.4.3"
   },
   "devDependencies": {
-    "iron-test-helpers": "PolymerElements/iron-test-helpers#1.4.1",
-    "px-flexbox-design": "0.5.x",
-    "px-viewport-design": "0.4.x",
-    "px-defaults-design": "1.0.x",
-    "px-colors-design": "0.3.x",
-    "px-normalize-design": "0.4.x",
-    "px-box-sizing-design": "0.2.x",
-    "px-helpers-design": "0.3.x",
-    "px-meta-lists-design": "0.4.x",
-    "px-mixins-design": "0.3.x",
-    "px-headings-design": "0.3.x",
-    "px-buttons-design": "1.1.x",
-    "px-spacing-design": "0.4.x",
-    "px-layout-design": "0.4.x",
-    "web-component-tester": "^6.0.0"
+    "web-component-tester": "^4.0.0"
   },
+  "private": true,
   "resolutions": {
-    "lodash": "4.16.x"
+    "pxd3": "^4.7.0"
   }
 }
