@@ -6,6 +6,7 @@
 <link rel="import" href="../bower_components/iron-form/iron-form.html"/>
 <link rel="import" href="../bower_components/paper-button/paper-button.html"/>
 <link rel="import" href="../bower_components/paper-input/paper-input.html"/>
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 <dom-module id="my-booking">
   <template>
   <style include="shared-styles">
@@ -36,8 +37,8 @@
     <p>Please confirm your reservation by specifing a time and date:</p>
       <p>
         <form is="iron-form" id="submitOptions">
-          <paper-input id ="bookingStartTime" label="Start Date/Time"></paper-input>
-          <paper-input id ="bookingEndTime" label="End Date/Time"></paper-input>
+          <paper-input id ="bookingStartTime" label="Start Date/Time" required></paper-input>
+          <paper-input id ="bookingEndTime" label="End Date/Time" required></paper-input>
         </form>
         <div class="buttons">
           <paper-button dialog-confirm autofocus on-tap="makeReservation">Confirm Reservation</paper-button>
@@ -59,35 +60,30 @@
         var path = this.subroute.path;
          path = path.replace('/', '');
          this.stop_id = path;
-
-       //check if there is a subroute
-       if (path===""){
+      if (path===""){
          //Where no path, redirect to home view
-         console.log ("NO PATH");
+         this.$.loginRedirect.click();
        };
-
       },
       makeReservation: function(){
-       var postURL = "BLAH/database/booking";
+        if (this.$.submitOptions.validate()) {
+       var postURL = "https://hackathon-booking-database.run.aws-usw02-pr.ice.predix.io/database/booking";
        var measureAjax = this.$.writeBookingReservation;
        measureAjax.url = postURL;
        measureAjax.body = {"station_id":this.stop_id, "from":this.$.bookingStartTime.value, "to":this.$.bookingEndTime.value, "user_id":"jeff"};
        measureAjax.generateRequest();
+         } else {
+        this.fire('missingInput');
+       }
      },
      bookingError : function(){
-        console.log ("Something has gone wrong. Oh dear!");
-        //CHANGE THIS TO FIRE ON HOMEPAGE + px ALERT
-        this.$.loginRedirect.click();
+        this.fire('bookingError');
       },
       bookingCompleted : function () {
         console.log ("SUCCESSS");
+        this.fire ('bookingCompleted');
         this.$.loginRedirect.click();
-
       }
-
-
-
-
     });
   </script>
 </dom-module>

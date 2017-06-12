@@ -105,6 +105,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
+    <paper-toast id="toastSuccess" text="Awesome! Weve made a note of your reservation"></paper-toast>
+<paper-toast id="toastError" text="Uh oh! It didnt work? Please try again in a little while"></paper-toast>
+<paper-toast id="missingInput" text="Please complete all required fields to continue"></paper-toast>
   </template>
 
   <script>
@@ -122,6 +125,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       observers: [
         '_routePageChanged(routeData.page)',
       ],
+      listeners: {
+        'bookingCompleted': 'bookingCompleted',
+        'bookingError': 'bookingError',
+        'missingInput': 'missingInput'
+      },
+  bookingError: function () {
+this.$.toastError.open();
+  },
+  bookingCompleted: function () {
+this.$.toastSuccess.open();
+  },
+  missingInput: function () {
+this.$.missingInput.open();
+  },
 
       _routePageChanged: function(page) {
         this.page = page || 'view4';
