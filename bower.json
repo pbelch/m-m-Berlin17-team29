@@ -35,7 +35,8 @@
     "paper-input": "^2.0.1",
     "paper-dialog": "^2.0.0",
     "paper-button": "^2.0.0",
-    "paper-toast": "^2.0.0"
+    "paper-toast": "^2.0.0",
+    "px-vis-xy-chart": "^1.1.1"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

@@ -71,6 +71,7 @@
        var measureAjax = this.$.writeBookingReservation;
        measureAjax.url = postURL;
        measureAjax.body = {"station_id":this.stop_id, "from":this.$.bookingStartTime.value, "to":this.$.bookingEndTime.value, "user_id":"jeff"};
+      console.log (measureAjax.body);
        measureAjax.generateRequest();
          } else {
         this.fire('missingInput');
