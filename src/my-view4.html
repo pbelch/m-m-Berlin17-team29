@@ -6,195 +6,84 @@
 <link rel="import" href="../bower_components/px-map/px-map-marker-static.html">
 <link rel="import" href="../bower_components/px-map/px-map-marker-symbol.html">
 <link rel="import" href="../bower_components/px-map/px-map-popup-info.html">
-<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/px-modal/px-modal.html"/>
-<link rel="import" href="../bower_components/iron-form/iron-form.html">
-<link rel="import" href="../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <dom-module id="my-view4">
-        <template>
-            <style>
-                px-map {
-                    width: 100%;
-                    height: 97vh;
-                }
+  <template>
+    <style>
+      px-map {
+        width: 100%;
+        height: 97vh;
+      }
+    </style>
 
-            </style>
+    <div id="ajax"></div>
+    <px-map id="worldMap" zoom="15" lat="53.289274411765973" lng="-6.253227258892083" flex-to-size="true" max-zoom="21">
+      <px-map-tile-layer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'></px-map-tile-layer>
+      <px-map-control-zoom position="bottomright"></px-map-control-zoom>
+    </px-map>
+  </template>
 
-            <div id="ajax">
+  <script>
+    Polymer({
+      is: 'my-view4',
+      properties: {},
 
-            </div>
-            <paper-icon-button icon="fa fa-briefcase" on-tap="openModal" title="Book Charge"></paper-icon-button>
-
-
-            <px-map id="worldMap" zoom="15" lat="53.289274411765973" lng="-6.253227258892083" flex-to-size="true" max-zoom="21">
-                <px-map-tile-layer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'></px-map-tile-layer>
-                <px-map-control-zoom position="bottomright"></px-map-control-zoom>
-
-            </px-map>
-
-            <paper-dialog id="newMeasurementModal" modal>
-    <h2>Record Measurement</h2>
-    <form is="iron-form" id="submitOptions">
-      <paper-input id ="measurePetId" label="Pet Name" value="{{selectedPetName}}"  disabled></paper-input>
-      <paper-input id ="measurePetHeight" type="number" label="Height (Measured in {{selectedHeight}})"></paper-input>
-      <paper-input id ="measurePetWeight" type="number" label="Weight (Measured in {{selectedWeight}})"></paper-input>
-      <paper-input id ="measurePetLength" type="number" label="Length (Measured in {{selectedHeight}})"></paper-input>
-      <br>
-    </form>
-    <div class="buttons">
-      <paper-button dialog-dismiss>Cancel</paper-button>
-      <paper-button dialog-confirm autofocus on-tap="processNewReading">Add</paper-button>
-    </div>
-</paper-dialog>
-
-
-
-        </template>
-
-        <script>
-
-          Polymer({
-            is: 'my-view4',
-            properties: {
-              selectedName : {
-                type: String,
-                value : "NAME HERE"
-              },
-              styles: {
-                type: Object,
-                value: {
-                  'LV_Three_Phase_Overhead_Line': {
-                    color: '#0000ff'
-                  },
-                  "LV_Single_Phase_Overhead_Line": {
-                    color: '#0000ff',
-                    weight: 2
-                  },
-                  "LV_Overhead_Asset": {
-                    color: '#0000ff',
-                    weight: 2
-                  },
-                  "LV_Underground_Cable": {
-                    color: '#ff0000'
-                  },
-                  "LV_Underground_Ground_Mounted_Asset": {
-                    color: '#ff0000'
-                  },
-
-                  "MV_Underground_Cable": {
-                    color: '#ff0000'
-                  },
-                  "MV_Underground_Ground_Mounted_Asset": {
-                    color: '#ff0000'
-                  }
-                }
-              }
-            },
-            listeners: {
-        'myFunction': 'myFunction'
+      getMapData: function() {
+        var parent = this.$.ajax;
+        var ajaxCaller;
+        ajaxCaller = document.createElement('iron-ajax');
+        ajaxCaller.url = 'https://mmeurope-ui-intelligent-mapping-team29.run.aws-usw02-pr.ice.predix.io/api/v1/collections/stations';
+        ajaxCaller.method = 'GET';
+        this.listen(ajaxCaller, 'response', 'addLayer');
+        this.listen(ajaxCaller, 'error', 'reportError');
+        parent.appendChild(ajaxCaller);
+        ajaxCaller.generateRequest();
       },
-
-            getMapData: function() {
-              var collections = Object.keys(this.styles);
-              //var parent = Polymer.dom(this).querySelector('#ajax');
-              var parent = this.$.ajax;
-              console.log ("PARENT NEXT");
-              console.log (parent);
-
-              var ajaxCaller;
-              for (var i = 0; i < collections.length; i++) {
-                ajaxCaller = document.createElement('iron-ajax');
-                ajaxCaller.url = 'https://mmeurope-ui-intelligent-mapping-team29.run.aws-usw02-pr.ice.predix.io/api/v1/collections/' + collections[i];
-                //ajaxCaller.url = '/api/v1/collections/' + collections[i];
-                ajaxCaller.id = collections[i];
-                ajaxCaller.method = 'GET';
-                this.listen(ajaxCaller, 'response', 'addLayer');
-                this.listen(ajaxCaller, 'error', 'reportError');
-                console.log (ajaxCaller);
-                parent.appendChild(ajaxCaller);
-                ajaxCaller.generateRequest();
-              }
-            },
-            getStationData: function() {
-              var parent = this.$.ajax;
-              console.log ("PARENT NEXT");
-              console.log (parent);
-
-              var ajaxCaller;
-              ajaxCaller = document.createElement('iron-ajax');
-              ajaxCaller.url = 'https://mmeurope-ui-intelligent-mapping-team29.run.aws-usw02-pr.ice.predix.io/api/v1/collections/stations';
-              //ajaxCaller.url = '/api/v1/collections/' + collections[i];
-              ajaxCaller.id = 'stations';
-              ajaxCaller.method = 'GET';
-              this.listen(ajaxCaller, 'response', 'generateMapMarkers');
-              this.listen(ajaxCaller, 'error', 'reportError');
-              console.log (ajaxCaller);
-              parent.appendChild(ajaxCaller);
-              ajaxCaller.generateRequest();
-            },
-
-
-            attached: function() {
-              this.getMapData();
-              this.getStationData();
-              //this.$.bookChargeModal.addEventListener("click", openModal);
-            },
-
-            generateMapMarkers: function(data) {
-              var map = this.$.worldMap;
-              var response = data.detail.response;
-              console.log(response);
-              for (var i=0; i<response.features.length; ++i){
-                var feature = response.features[i];
-                  var marker = document.createElement('px-map-marker-symbol');
-                  marker.lat = JSON.stringify(feature.geometry.coordinates[1]);
-                  marker.lng = JSON.stringify(feature.geometry.coordinates[0]);
-                  marker.onClick = "openModal";
-                  console.log(feature);
-                  var id = feature.id;
-                  //console.log (id);
-                  marker.symbolClass = 'fa fa-briefcase';
-                  var info = document.createElement('px-map-popup-info');
-
-                  info.title = feature.properties.customer_name + "'s Drive";
-                  //info.description = '<px-modal id="bookChargeModal" btn-modal-positive="Continue" btn-modal-negative="Back" modal-heading="Reserve Space"><button class="btn btn--primary modal-trigger">Open Modal</button><p><b></b></p><p>Lorem ipsum</p></px-modal>';
-  info.description='<div id="bookChargeModal">'+ feature.properties.street_address + '<br/><a href="http://localhost:3001/station/' + id + '">Book Now</a></div>';
-                  marker.appendChild(info);
-                  map.appendChild(marker);
-              }
-            },
-
-            openModal: function() {
-              //this.$.newMeasurementModal.open();
-              console.log ("TEST");
-
-            //  console.log("fired");
-            //  alert('Search clicked');
-
-              //this.$.bookChargeModal.modalButtonClicked();
-
-              // Polymer.dom(document).querySelector("#bookChargeModal").modalButtonClicked();
-            },
-            myFunction: function() {
-              alert("he clicked me :)");
-            },
-
-            addLayer: function(evt) {
-              console.log('Adding layer ', evt.target.id);
-              //var map = this.querySelector('px-map');
-              var map = this.$.worldMap;
-              var item = document.createElement('px-map-layer-geojson');
-              item.data = evt.detail.response;
-              item.featureStyle = this.styles[evt.target.id];
-              item.showFeatureProperties = true;
-              map.appendChild(item);
-            },
-            reportError: function(evt) {
-              console.error(evt);
-            }
-          });
-        </script>
-
-    </dom-module>
+      getStationData: function() {
+        var parent = this.$.ajax;
+        var ajaxCaller;
+        ajaxCaller = document.createElement('iron-ajax');
+        ajaxCaller.url = 'https://mmeurope-ui-intelligent-mapping-team29.run.aws-usw02-pr.ice.predix.io/api/v1/collections/stations'
+        ajaxCaller.id = 'stations';
+        ajaxCaller.method = 'GET';
+        this.listen(ajaxCaller, 'response', 'generateMapMarkers');
+        this.listen(ajaxCaller, 'error', 'reportError');
+        parent.appendChild(ajaxCaller);
+        ajaxCaller.generateRequest();
+      },
+      attached: function() {
+        this.getMapData();
+        this.getStationData();
+      },
+      generateMapMarkers: function(data) {
+        var map = this.$.worldMap;
+        var response = data.detail.response;
+        for (var i=0; i<response.features.length; ++i){
+          var feature = response.features[i];
+          var marker = document.createElement('px-map-marker-symbol');
+          marker.lat = JSON.stringify(feature.geometry.coordinates[1]);
+          marker.lng = JSON.stringify(feature.geometry.coordinates[0]);
+          //marker.onClick = "openModal";
+          var id = feature.id;
+          marker.symbolClass = 'fa fa-briefcase';
+          var info = document.createElement('px-map-popup-info');
+          info.title = feature.properties.customer_name + "'s Drive";
+          info.description='<div id="bookChargeModal">'+ feature.properties.street_address + '<br/><a href="http://localhost:3001/station/' + id + '">Book Now</a></div>';
+          marker.appendChild(info);
+          map.appendChild(marker);
+        }
+      },
+      addLayer: function(evt) {
+        var map = this.$.worldMap;
+        var item = document.createElement('px-map-layer-geojson');
+        item.data = evt.detail.response;
+        item.showFeatureProperties = true;
+        map.appendChild(item);
+      },
+      reportError: function(evt) {
+        console.error(evt);
+      }
+    });
+  </script>
+</dom-module>
