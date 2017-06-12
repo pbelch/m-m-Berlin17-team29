@@ -1,0 +1,58 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/px-map/px-map.html">
+<link rel="import" href="../bower_components/px-map/px-map-tile-layer.html">
+<link rel="import" href="../bower_components/px-map/px-map-tile-layer-bing.html">
+<link rel="import" href="../bower_components/px-map/px-map-layer-geojson.html">
+<link rel="import" href="../bower_components/px-map/px-map-control-zoom.html">
+<link rel="import" href="../bower_components/px-widget-cards/px-twoup.html"/>
+<link rel="import" href="../bower_components/px-toggle/px-toggle.html"/>
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-station">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+    </style>
+
+    <px-twoup id="widget-2" widget-header="My Station" widget-icon="fa-paper-plane">
+      <div class='widget-1'>
+        <span>
+          Name : EcoHouse<br/>
+          Type : Tesla SuperCharger 120kW (2001)<br/><br/>
+          <px-toggle size="regular (default)" checked="true"></px-toggle>  Shared with Community 
+        </span>
+    </div>
+    <!--Need to foruce bottom line here, as looks naff only going one accross -->
+    <div class='widget-2'>
+      <span>
+        <div style="height:200px;width:600px;display:flex"><px-map zoom="8" lat="37.7749" lng="-122.4312" flex-to-size="true" disable-scroll-zoom="true" disable-touch-zoom="true"><px-map-tile-layer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'></px-map></div>
+      </span>
+    </div>
+  </px-twoup>
+
+  <px-twoup id="widget-2" widget-header="2 Widget Card" widget-icon="fa-paper-plane">
+      <div class='widget-1'>
+        <span>
+          Personal Reservation Schedule
+        </span>
+      </div>
+      <!--Need to foruce bottom line here, as looks naff only going one accross -->
+      <div class='widget-2'>
+        <span>
+        Personal Reservation Schedule
+        </span>
+      </div>
+    </px-twoup>
+
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'my-station',
+    });
+  </script>
+</dom-module>
