@@ -9,6 +9,7 @@
 <link rel="import" href="../bower_components/px-timeline/px-timeline.html"/>
 <link rel="import" href="../bower_components/px-data-table/px-data-table.html"/>
 <link rel="import" href="../bower_components/px-polymer-font-awesome/px-polymer-font-awesome.html"/>
+<link rel="import" href="../bower_components/px-vis-xy-chart/px-vis-xy-chart.html"/>
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-station">
@@ -19,6 +20,17 @@
         padding: 10px;
       }
     </style>
+
+    <iron-ajax
+    id= "getSpaceBookings"
+    handle-as="json"
+    content-type="application/json"
+    method="POST"
+    on-response="loadSpaceBookings"
+    url = "https://hackathon-booking-database.run.aws-usw02-pr.ice.predix.io/database/bookings/stationid"
+    on-error="bookingsError">
+  </iron-ajax>
+
 
     <px-twoup id="widget-2" widget-header="My Station" widget-icon="fa-paper-plane">
       <div class='widget-1'>
@@ -48,7 +60,7 @@
       <div class='widget-2'>
         <span>
         Station Bookings<br/>
-        <px-timeline time-groups="true" compact-editor-info="true" enhanced="true" timeline-data='[{"metaData":{"editedBy":"GE Digital","editedDate":"Tue Nov 03 2015 00:00:00 GMT-0700 (PDT)"},"content":{"title":"Today 14:00 to 16:00","bodyType":"text","body":[{"text":"","headline":"","isComment":true}]}},{"metaData":{"editedBy":"Colin Murray","editedDate":"Tue Nov 03 2015 00:00:00 GMT-0700 (PDT)"},"content":{"title":"Tomorrow 14:00 to 16:00","bodyType":"text","body":[{"text":"","headline":"","isComment":true}]}}]' date-format=" "></px-timeline>
+        <px-timeline time-groups="true" compact-editor-info="true" enhanced="true" timeline-data='[[bookingItems]]' date-format=" "></px-timeline>
         </span>
       </div>
     </px-twoup>
@@ -59,6 +71,28 @@
   <script>
     Polymer({
       is: 'my-station',
+      properties: {
+        stop_id : String,
+        bookingItems : Array
+      },
+      attached: function() {
+        var getCurrentBookings = this.$.getSpaceBookings;
+        getCurrentBookings.body = {"station_id": "1"}
+        getCurrentBookings.generateRequest();
+      },
+      loadSpaceBookings: function (response) {
+        this.bookingItems = [];
+        for (var i=0; i< response.detail.response.length; i ++) {
+              var currentObject = response.detail.response[i];
+              var pushObject = {"metaData":{"editedBy":currentObject.user_id,"editedDate":"Tue Nov 03 2015 00:00:00 GMT-0700 (PDT)"},"content":{"title":currentObject.from + " TO " + currentObject.to,"bodyType":"text","body":[{"text":"","headline":"","isComment":true}]}}
+              console.log (pushObject);
+              this.push ('bookingItems', pushObject);
+            }
+      },
+      bookingsError: function (){
+        console.log ("BOOKING ERROR");
+      }
+
     });
   </script>
 </dom-module>
