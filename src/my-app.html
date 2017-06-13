@@ -28,37 +28,47 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style include="px-theme-styles" is="custom-style"></style>
     <style>
       :host {
-        --app-primary-color: #4285f4;
-        --app-secondary-color: black;
+        --app-primary-color: #2c404c;
+        --app-secondary-color: #b6c3cc;
+
+        --app-drawer-content-container: {
+        background-color: #1B2A33;
+        };
 
         display: block;
       }
-
       app-header {
-        color: #fff;
-        background-color: var(--app-primary-color);
-      }
+        color:#b6c3cc;
+        background-color: #2c404c;
+      };
+
       app-header paper-icon-button {
-        --paper-icon-button-ink-color: white;
+        --paper-icon-button-ink-color: #b6c3cc;
       }
 
       .drawer-list {
         margin: 0 20px;
-
       }
 
       .drawer-list a {
         display: block;
         padding: 0 16px;
         text-decoration: none;
-        color: var(--app-secondary-color);
+        color: #b6c3cc;
         line-height: 40px;
       }
 
       .drawer-list a.iron-selected {
-        color: black;
+        color: white;
         font-weight: bold;
       }
+
+      app-toolbar{
+      color: #b6c3cc;
+      text-align: center
+      font-size: 100px;
+  };
+}
     </style>
 
     <app-location route="{{route}}"></app-location>
@@ -71,7 +81,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <app-drawer-layout fullbleed>
       <!-- Drawer content -->
       <app-drawer id="drawer">
-        <app-toolbar>Menu</app-toolbar>
+        <app-toolbar> <img src="../images/manifest/General_Electric_logo.svg" height="30px" width="30px"/>&nbsp;&nbsp; Charge!</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="view4" href="/view4">Find Station</a>
           <a name="account" href="/account">My Account</a>
@@ -88,7 +98,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-header condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
-            <div main-title>Charge</div>
+            <div style="width: 100%; text-align:right;">
+              <h3 class="flex__item weight--normal logo style-scope ge-app">Powered by
+                <img src="../images/manifest/Predix_Logo.svg.png" height="17px" width="110px"/>
+              </h3>
+            </div>
           </app-toolbar>
         </app-header>
 
