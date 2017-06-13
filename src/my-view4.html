@@ -67,7 +67,7 @@
           marker.lng = JSON.stringify(feature.geometry.coordinates[0]);
           //marker.onClick = "openModal";
           var id = feature.id;
-          marker.symbolClass = 'fa fa-briefcase';
+          marker.symbolClass = 'fa fa-bolt';
           var info = document.createElement('px-map-popup-info');
           info.title = feature.properties.customer_name + "'s Drive";
           info.description='<div id="bookChargeModal">'+ feature.properties.street_address + '<br/><a href="https://charge.run.aws-usw02-pr.ice.predix.io/booking/' + id + '">Book Now</a></div>';
