@@ -9,224 +9,160 @@
 <link rel="import" href="../bower_components/px-map/px-map-marker-static.html">
 <link rel="import" href="../bower_components/px-map/px-map-marker-symbol.html">
 <link rel="import" href="../bower_components/px-map/px-map-popup-info.html">
-<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/px-vis-xy-chart/px-vis-xy-chart.html"/>
 <link rel="import" href="/bower_components/px-card/px-card.html"/>
 
 <dom-module id="my-view5">
-        <template>
-            <style>
-            :host {
-              display: block;
-              padding: 10px;
+  <template>
+    <style>
+      :host {
+        display: block;
+        padding: 10px;
+      }
+      px-map {
+        width: 100%;
+        height: 30vh;
+      }
+    </style>
+
+    <iron-ajax
+      id= "getUtilisationData"
+      handle-as="json"
+      content-type="application/json"
+      method="POST"
+      on-response="generateChartData"
+      url = 'https://hackathon-booking-database.run.aws-usw02-pr.ice.predix.io/database/usage';
+      body = '{"startDate":"2017-JUN-13 08:22:00", "endDate":"2017-JUN-13 14:30:02"}';
+      on-error="reportError"
+      loading="{{loading}}">
+    </iron-ajax>
+
+    <px-card chevron="true" header-text="Grid Management" icon="fa-fort-awesome">
+      <div id="ajax"></div>
+      <px-map id="worldMap" zoom="15" lat="53.289274411765973" lng="-6.253227258892083" flex-to-size="true" max-zoom="21">
+        <px-map-tile-layer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'></px-map-tile-layer>
+        <px-map-control-zoom position="bottomright"></px-map-control-zoom>
+      </px-map>
+    </px-card>
+
+    <px-card chevron="true" header-text="Usage Analytics" icon="fa-fort-awesome">
+      <px-vis-timeseries prevent-resize="true" debounce-resize-timing="250" width="900" height="250" progressive-rendering-points-per-frame="16000" progressive-rendering-min-frames="1" chart-horizontal-alignment="center" chart-vertical-alignment="center" margin='{"top":5,"bottom":60,"left":65,"right":65}' show-tooltip="true" tooltip-config='{}' hide-register="true" register-config='{"type":"vertical","width":200}' selection-type="xy" chart-data='[[hourTitle]]' series-config='{"y0":{"name":"y0","x":"x","y":"y0","yAxisUnit":"kW","axis":{"id":"axis1","side":"left","number":"1"}}}' chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}' event-data='[]' event-config='{}' threshold-data='[]' display-threshold-title="true" threshold-config='{"max":{"color":"red","dashPattern":"5,0","title":"MAX","showThresholdBox":true,"displayTitle":true}}' x-axis-config='{"title":"Hour"}' y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Demand","titleTruncation":false,"unit":"kW"}}' dynamic-menu-config='[]' toolbar-config='{}' navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'></px-vis-timeseries>
+    </px-card>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'my-view5',
+      properties: {
+        hourTitle : Array,
+        localValues: Array,
+        loading: {
+          type: Boolean,
+          readOnly: true,
+          notify: true,
+          value: false
+        },
+        styles: {
+          type: Object,
+          value: {
+            'LV_Three_Phase_Overhead_Line': {
+              color: '#0000ff'
+            },
+            "LV_Single_Phase_Overhead_Line": {
+              color: '#0000ff',
+              weight: 2
+            },
+            "LV_Overhead_Asset": {
+              color: '#0000ff',
+              weight: 2
+            },
+            "LV_Underground_Cable": {
+              color: '#ff0000'
+            },
+            "LV_Underground_Ground_Mounted_Asset": {
+              color: '#ff0000'
+            },
+            "MV_Underground_Cable": {
+              color: '#ff0000'
+            },
+            "MV_Underground_Ground_Mounted_Asset": {
+              color: '#ff0000'
             }
-                px-map {
-                    width: 100%;
-                    height: 30vh;
-                }
-                px-viz-xy-chart {
-                   width: 100%;
-                   height: 45vh;
-                }
-
-
-
-            </style>
-
-            <iron-ajax
-            id= "getUtilisationData"
-            handle-as="json"
-            content-type="application/json"
-            method="POST"
-            on-response="generateChartData"
-            url = 'https://hackathon-booking-database.run.aws-usw02-pr.ice.predix.io/database/usage';
-            body = '{"startDate":"2017-JUN-13 08:22:00", "endDate":"2017-JUN-13 14:30:02"}';
-            on-error="reportError"
-            loading="{{loading}}"
-            >
-          </iron-ajax>
-<px-card chevron="true" header-text="Grid Management" icon="fa-fort-awesome">
-            <div id="ajax">
-
-            </div>
-
-
-            <px-map id="worldMap" zoom="15" lat="53.289274411765973" lng="-6.253227258892083" flex-to-size="true" max-zoom="21">
-                <px-map-tile-layer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'></px-map-tile-layer>
-                <px-map-control-zoom position="bottomright"></px-map-control-zoom>
-
-            </px-map>
-          </px-card>
-
-<!--<template is="dom-if" if="{{loading}}">-->
-<px-card chevron="true" header-text="Usage Analytics" icon="fa-fort-awesome">
-            <px-vis-timeseries prevent-resize="true" debounce-resize-timing="250" width="900" height="250" progressive-rendering-points-per-frame="16000" progressive-rendering-min-frames="1" chart-horizontal-alignment="center" chart-vertical-alignment="center" margin='{"top":5,"bottom":60,"left":65,"right":65}' show-tooltip="true" tooltip-config='{}' hide-register="true" register-config='{"type":"vertical","width":200}' selection-type="xy" chart-data='[[hourTitle]]' series-config='{"y0":{"name":"y0","x":"x","y":"y0","yAxisUnit":"kW","axis":{"id":"axis1","side":"left","number":"1"}}}' chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}' event-data='[]' event-config='{}' threshold-data='[]' display-threshold-title="true" threshold-config='{"max":{"color":"red","dashPattern":"5,0","title":"MAX","showThresholdBox":true,"displayTitle":true}}' x-axis-config='{"title":"Hour"}' y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Demand","titleTruncation":false,"unit":"kW"}}' dynamic-menu-config='[]' toolbar-config='{}' navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'></px-vis-timeseries>
-          <!--</template>-->
-</px-card>
-
-        </template>
-
-        <script>
-
-
-
-          Polymer({
-            is: 'my-view5',
-            properties: {
-              hourTitle : Array,
-              localValues: Array,
-              loading: {
-                 type: Boolean,
-                 readOnly: true,
-                 notify: true,
-                 value: false
-               },
-              styles: {
-                type: Object,
-                value: {
-                  'LV_Three_Phase_Overhead_Line': {
-                    color: '#0000ff'
-                  },
-                  "LV_Single_Phase_Overhead_Line": {
-                    color: '#0000ff',
-                    weight: 2
-                  },
-                  "LV_Overhead_Asset": {
-                    color: '#0000ff',
-                    weight: 2
-                  },
-                  "LV_Underground_Cable": {
-                    color: '#ff0000'
-                  },
-                  "LV_Underground_Ground_Mounted_Asset": {
-                    color: '#ff0000'
-                  },
-
-                  "MV_Underground_Cable": {
-                    color: '#ff0000'
-                  },
-                  "MV_Underground_Ground_Mounted_Asset": {
-                    color: '#ff0000'
-                  }
-                }
-              }
-            },
-
-            getMapData: function() {
-              var collections = Object.keys(this.styles);
-              //var parent = Polymer.dom(this).querySelector('#ajax');
-              var parent = this.$.ajax;
-              //console.log ("PARENT NEXT");
-              //console.log (parent);
-
-              var ajaxCaller;
-              for (var i = 0; i < collections.length; i++) {
-                ajaxCaller = document.createElement('iron-ajax');
-                ajaxCaller.url = 'https://mmeurope-ui-intelligent-mapping-team29.run.aws-usw02-pr.ice.predix.io/api/v1/collections/' + collections[i];
-                //ajaxCaller.url = '/api/v1/collections/' + collections[i];
-                ajaxCaller.id = collections[i];
-                ajaxCaller.method = 'GET';
-                this.listen(ajaxCaller, 'response', 'addLayer');
-                this.listen(ajaxCaller, 'error', 'reportError');
-                //console.log (ajaxCaller);
-                parent.appendChild(ajaxCaller);
-                ajaxCaller.generateRequest();
-              }
-            },
-            getStationData: function() {
-              var parent = this.$.ajax;
-              //console.log ("PARENT NEXT");
-              //console.log (parent);
-
-              var ajaxCaller;
-              ajaxCaller = document.createElement('iron-ajax');
-              ajaxCaller.url = 'https://mmeurope-ui-intelligent-mapping-team29.run.aws-usw02-pr.ice.predix.io/api/v1/collections/stations';
-              //ajaxCaller.url = '/api/v1/collections/' + collections[i];
-              ajaxCaller.id = 'stations';
-              ajaxCaller.method = 'GET';
-              this.listen(ajaxCaller, 'response', 'generateMapMarkers');
-              this.listen(ajaxCaller, 'error', 'reportError');
-              //console.log (ajaxCaller);
-              parent.appendChild(ajaxCaller);
-              ajaxCaller.generateRequest();
-            },
-
-            attached: function() {
-              this.getMapData();
-              this.getStationData();
-              var getHistory = this.$.getUtilisationData;
-              getHistory.generateRequest();
-            },
-
-            generateChartData: function(response) {
-              console.log ("IN GET CHART DATA");
-              //{"Date":1468213850000,"T48A":1332,"Line":1340}
-              //console.log (response.detail.response);
-              this.hourTitle = [];
-              this.localValues = [];
-              var dateTime = 1497312000000;
-              //var dateTime = new Date().getTime();
-              for (var i=0; i< response.detail.response.length; i ++) {
-                    var currentObject = response.detail.response[i];
-                    //[{"x":1397102460000,"y0":11.4403},{"x":1397139660000,"y0":13.1913},{"x":1397177400000,"y0":12.8485},{"x":1397228040000,"y0":10.975},{"x":1397248260000,"y0":12.9377},{"x":1397291280000,"y0":13.3795},{"x":1397522940000,"y0":16.4446},{"x":1397542800000,"y0":12.2771}]
-
-                    console.log (dateTime);
-                    //var timestamp = Math.floor(dateTime / 1000);
-                    //console.log (timestamp);
-                    var actualtime = dateTime+(currentObject.hour *3600000);
-                    var pushObject = {"x":actualtime,"y0":currentObject.count}
-                  //console.log (pushObject);
-                  //  this.push ('localValues', currentObject.count);
-                    this.push ('hourTitle', pushObject);
-                  }
-                  console.log ("LOADED");
-                  console.log (this.hourTitle);
-            //  console.log (JSON.stringify(this.localValues));
-            //  this.useageData = JSON.stringify(this.localValues);
-            //  this.useageData = "[[24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24]]"
-            },
-
-            generateMapMarkers: function(data) {
-              var map = this.$.worldMap;
-              var response = data.detail.response;
-              for (var i=0; i<response.features.length; ++i){
-                var feature = response.features[i];
-                  var marker = document.createElement('px-map-marker-symbol');
-                  marker.lat = JSON.stringify(feature.geometry.coordinates[1]);
-                  marker.lng = JSON.stringify(feature.geometry.coordinates[0]);
-                  console.log(marker);
-                  marker.symbolClass = 'fa fa-bolt';
-                  var info = document.createElement('px-map-popup-info');
-                  info.title = 'Charging Station';
-                  info.description='<div id="bookChargeModal">'+ feature.properties.street_address + '</div>';
-                  marker.appendChild(info);
-                  map.appendChild(marker);
-              }
-            },
-            openModal: function() {
-              console.log("fired");
-              this.$.bookChargeModal.modalButtonClicked();
-              // Polymer.dom(document).querySelector("#bookChargeModal").modalButtonClicked();
-            },
-
-            addLayer: function(evt) {
-              console.log('Adding layer ', evt.target.id);
-              //var map = this.querySelector('px-map');
-              var map = this.$.worldMap;
-              var item = document.createElement('px-map-layer-geojson');
-              ///
-
-              //
-              item.data = evt.detail.response;
-              item.featureStyle = this.styles[evt.target.id];
-              item.showFeatureProperties = true;
-              map.appendChild(item);
-            },
-            reportError: function(evt) {
-              console.error(evt);
-            }
-          });
-        </script>
-
-    </dom-module>
+          }
+        }
+      },
+      getMapData: function() {
+        var collections = Object.keys(this.styles);
+        var parent = this.$.ajax;
+        var ajaxCaller;
+        for (var i = 0; i < collections.length; i++) {
+          ajaxCaller = document.createElement('iron-ajax');
+          ajaxCaller.url = 'https://mmeurope-ui-intelligent-mapping-team29.run.aws-usw02-pr.ice.predix.io/api/v1/collections/' + collections[i];
+          ajaxCaller.id = collections[i];
+          ajaxCaller.method = 'GET';
+          this.listen(ajaxCaller, 'response', 'addLayer');
+          this.listen(ajaxCaller, 'error', 'reportError');
+          parent.appendChild(ajaxCaller);
+          ajaxCaller.generateRequest();
+        }
+      },
+      getStationData: function() {
+        var parent = this.$.ajax;
+        var ajaxCaller;
+        ajaxCaller = document.createElement('iron-ajax');
+        ajaxCaller.url = 'https://mmeurope-ui-intelligent-mapping-team29.run.aws-usw02-pr.ice.predix.io/api/v1/collections/stations';
+        ajaxCaller.id = 'stations';
+        ajaxCaller.method = 'GET';
+        this.listen(ajaxCaller, 'response', 'generateMapMarkers');
+        this.listen(ajaxCaller, 'error', 'reportError');
+        parent.appendChild(ajaxCaller);
+        ajaxCaller.generateRequest();
+      },
+      attached: function() {
+        this.getMapData();
+        this.getStationData();
+        var getHistory = this.$.getUtilisationData;
+        getHistory.generateRequest();
+      },
+      generateChartData: function(response) {
+        this.hourTitle = [];
+        this.localValues = [];
+        var dateTime = 1497312000000;
+        for (var i=0; i< response.detail.response.length; i ++) {
+            var currentObject = response.detail.response[i];;
+            var actualtime = dateTime+(currentObject.hour *3600000);
+            var pushObject = {"x":actualtime,"y0":currentObject.count}
+            this.push ('hourTitle', pushObject);
+          }
+        },
+        generateMapMarkers: function(data) {
+          var map = this.$.worldMap;
+          var response = data.detail.response;
+          for (var i=0; i<response.features.length; ++i){
+            var feature = response.features[i];
+            var marker = document.createElement('px-map-marker-symbol');
+            marker.lat = JSON.stringify(feature.geometry.coordinates[1]);
+            marker.lng = JSON.stringify(feature.geometry.coordinates[0]);
+            marker.symbolClass = 'fa fa-bolt';
+            var info = document.createElement('px-map-popup-info');
+            info.title = 'Charging Station';
+            info.description='<div id="bookChargeModal">'+ feature.properties.street_address + '</div>';
+            marker.appendChild(info);
+            map.appendChild(marker);
+          }
+        },
+        addLayer: function(evt) {
+          var map = this.$.worldMap;
+          var item = document.createElement('px-map-layer-geojson');
+          item.data = evt.detail.response;
+          item.featureStyle = this.styles[evt.target.id];
+          item.showFeatureProperties = true;
+          map.appendChild(item);
+        },
+        reportError: function(evt) {
+          console.error(evt);
+        }
+      });
+  </script>
+</dom-module>
