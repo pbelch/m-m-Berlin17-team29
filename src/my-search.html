@@ -19,10 +19,10 @@
     </style>
 
     <div id="ajax"></div>
-    <button on-click="changeCarLocation">Move</button>
     <px-map id="worldMap" zoom="15" lat="53.289274411765973" lng="-6.253227258892083" flex-to-size="true" max-zoom="21">
       <px-map-tile-layer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'></px-map-tile-layer>
       <px-map-control-zoom position="bottomright"></px-map-control-zoom>
+      <px-map-marker-symbol lat="53.291248" lng="-6.257422" symbol-class="fa fa-car"></px-map-marker-symbol>
     </px-map>
   </template>
 
