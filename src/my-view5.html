@@ -12,19 +12,24 @@
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/px-vis-xy-chart/px-vis-xy-chart.html"/>
-<link rel="import" href="../bower_components/px-kpi/px-kpi.html"/>
+<link rel="import" href="/bower_components/px-card/px-card.html"/>
 
 <dom-module id="my-view5">
         <template>
             <style>
+            :host {
+              display: block;
+              padding: 10px;
+            }
                 px-map {
                     width: 100%;
-                    height: 50vh;
+                    height: 30vh;
                 }
                 px-viz-xy-chart {
                    width: 100%;
                    height: 45vh;
                 }
+
 
 
             </style>
@@ -41,7 +46,7 @@
             loading="{{loading}}"
             >
           </iron-ajax>
-
+<px-card chevron="true" header-text="Grid Management" icon="fa-fort-awesome">
             <div id="ajax">
 
             </div>
@@ -52,11 +57,13 @@
                 <px-map-control-zoom position="bottomright"></px-map-control-zoom>
 
             </px-map>
+          </px-card>
 
 <!--<template is="dom-if" if="{{loading}}">-->
-            <px-vis-timeseries prevent-resize="true" debounce-resize-timing="250" width="700" height="450" progressive-rendering-points-per-frame="16000" progressive-rendering-min-frames="1" chart-horizontal-alignment="center" chart-vertical-alignment="center" margin='{"top":30,"bottom":60,"left":65,"right":65}' show-tooltip="true" tooltip-config='{}' hide-register="true" register-config='{"type":"vertical","width":200}' selection-type="xy" chart-data='[[hourTitle]]' series-config='{"y0":{"name":"y0","x":"x","y":"y0","yAxisUnit":"F","axis":{"id":"axis1","side":"left","number":"1"}}}' chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}' event-data='[]' event-config='{}' threshold-data='[]' display-threshold-title="true" threshold-config='{"max":{"color":"red","dashPattern":"5,0","title":"MAX","showThresholdBox":true,"displayTitle":true}}' x-axis-config='{"title":"Hour"}' y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Demand","titleTruncation":false,"unit":"kW"}}' dynamic-menu-config='[]' toolbar-config='{}' navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'></px-vis-timeseries>
+<px-card chevron="true" header-text="Usage Analytics" icon="fa-fort-awesome">
+            <px-vis-timeseries prevent-resize="true" debounce-resize-timing="250" width="900" height="250" progressive-rendering-points-per-frame="16000" progressive-rendering-min-frames="1" chart-horizontal-alignment="center" chart-vertical-alignment="center" margin='{"top":5,"bottom":60,"left":65,"right":65}' show-tooltip="true" tooltip-config='{}' hide-register="true" register-config='{"type":"vertical","width":200}' selection-type="xy" chart-data='[[hourTitle]]' series-config='{"y0":{"name":"y0","x":"x","y":"y0","yAxisUnit":"F","axis":{"id":"axis1","side":"left","number":"1"}}}' chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}' event-data='[]' event-config='{}' threshold-data='[]' display-threshold-title="true" threshold-config='{"max":{"color":"red","dashPattern":"5,0","title":"MAX","showThresholdBox":true,"displayTitle":true}}' x-axis-config='{"title":"Hour"}' y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Demand","titleTruncation":false,"unit":"kW"}}' dynamic-menu-config='[]' toolbar-config='{}' navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'></px-vis-timeseries>
           <!--</template>-->
-
+</px-card>
 
         </template>
 
@@ -192,7 +199,7 @@
                   marker.symbolClass = 'fa fa-bolt';
                   var info = document.createElement('px-map-popup-info');
                   info.title = 'Charging Station';
-                  info.description = 'FUCK THIS SHIT';
+                  info.description='<div id="bookChargeModal">'+ feature.properties.street_address + '</div>';
                   marker.appendChild(info);
                   map.appendChild(marker);
               }
