@@ -19,6 +19,7 @@
     </style>
 
     <div id="ajax"></div>
+    <button on-click="changeCarLocation">Move</button>
     <px-map id="worldMap" zoom="15" lat="53.289274411765973" lng="-6.253227258892083" flex-to-size="true" max-zoom="21">
       <px-map-tile-layer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'></px-map-tile-layer>
       <px-map-control-zoom position="bottomright"></px-map-control-zoom>
@@ -28,7 +29,8 @@
   <script>
     Polymer({
       is: 'my-search',
-      properties: {},
+      properties: {
+      },
 
       getMapData: function() {
         var parent = this.$.ajax;
