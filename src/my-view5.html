@@ -1,7 +1,4 @@
-<!--<link rel="import" href="../bower_components/px-simple-horizontal-bar-chart/px-simple-horizontal-bar-chart.html">
--->
 <link rel="import" href="../bower_components/px-map/px-map.html">
-<link rel="import" href="../bower_components/px-vis-timeseries/px-vis-timeseries.html">
 <link rel="import" href="../bower_components/px-map/px-map-tile-layer.html">
 <link rel="import" href="../bower_components/px-map/px-map-tile-layer-bing.html">
 <link rel="import" href="../bower_components/px-map/px-map-layer-geojson.html">
@@ -11,8 +8,8 @@
 <link rel="import" href="../bower_components/px-map/px-map-popup-info.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/px-modal/px-modal.html"/>
 <link rel="import" href="../bower_components/px-vis-xy-chart/px-vis-xy-chart.html"/>
-<link rel="import" href="../bower_components/px-kpi/px-kpi.html"/>
 
 <dom-module id="my-view5">
         <template>
@@ -29,19 +26,6 @@
 
             </style>
 
-            <iron-ajax
-            id= "getUtilisationData"
-            handle-as="json"
-            content-type="application/json"
-            method="POST"
-            on-response="generateChartData"
-            url = 'https://hackathon-booking-database.run.aws-usw02-pr.ice.predix.io/database/usage';
-            body = '{"startDate":"2017-JUN-13 08:22:00", "endDate":"2017-JUN-13 14:30:02"}';
-            on-error="reportError"
-            loading="{{loading}}"
-            >
-          </iron-ajax>
-
             <div id="ajax">
 
             </div>
@@ -53,10 +37,8 @@
 
             </px-map>
 
-<!--<template is="dom-if" if="{{loading}}">-->
-            <px-vis-timeseries prevent-resize="true" debounce-resize-timing="250" width="700" height="450" progressive-rendering-points-per-frame="16000" progressive-rendering-min-frames="1" chart-horizontal-alignment="center" chart-vertical-alignment="center" margin='{"top":30,"bottom":60,"left":65,"right":65}' show-tooltip="true" tooltip-config='{}' hide-register="true" register-config='{"type":"vertical","width":200}' selection-type="xy" chart-data='[[hourTitle]]' series-config='{"y0":{"name":"y0","x":"x","y":"y0","yAxisUnit":"F","axis":{"id":"axis1","side":"left","number":"1"}}}' chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}' event-data='[]' event-config='{}' threshold-data='[]' display-threshold-title="true" threshold-config='{"max":{"color":"red","dashPattern":"5,0","title":"MAX","showThresholdBox":true,"displayTitle":true}}' x-axis-config='{"title":"Hour"}' y-axis-config='{"title":"Single","titleTruncation":false,"unit":"F","axis1":{"title":"Demand","titleTruncation":false,"unit":"kW"}}' dynamic-menu-config='[]' toolbar-config='{}' navigator-config='{"xAxisConfig":{"tickFormat":"%b %d"}}'></px-vis-timeseries>
-          <!--</template>-->
-
+            <px-vis-xy-chart debounce-resize-timing="250" width="507.046875" height="300" progressive-rendering-points-per-frame="16000" progressive-rendering-min-frames="1" chart-horizontal-alignment="center" chart-vertical-alignment="center" margin='{"top":30,"bottom":60,"left":75,"right":20}' tooltip-config='{"forceDateTimeDisplay":true}' register-config='{"type":"vertical","width":220,"forceDateTimeDisplay":true}' selection-type="xy" chart-data='[{"Date":1468213850000,"T48A":1332,"T48B":1346,"T48C":1330,"T48D":1342,"Line":1340},{"Date":1468213968000,"T48A":1336,"T48B":1343,"T48C":1336,"T48D":1340,"Line":1343},{"Date":1468214133000,"T48A":1341,"T48B":1345,"T48C":1331,"T48D":1333,"Line":1345},{"Date":1468214253000,"T48A":1348,"T48B":1344,"T48C":1343,"T48D":1339,"Line":1350},{"Date":1468214374000,"T48A":1352,"T48B":1346,"T48C":1335,"T48D":1342,"Line":1357},{"Date":1468214564000,"T48A":1341,"T48B":1342,"T48C":1344,"T48D":1346},{"Date":1468214682000,"T48A":1348,"T48B":1353,"T48C":1337,"T48D":1331},{"Date":1468214852000,"T48A":1346,"T48B":1348,"T48C":1339,"T48D":1335},{"Date":1468231470000,"T48A":1353,"T48B":1355},{"Date":1468231590000,"T48A":1359,"T48B":1359},{"Date":1468232041000,"T48A":1357,"T48B":1359},{"Date":1468232184000,"T48A":1357,"T48B":1359},{"Date":1468232301000,"T48A":1353,"T48B":1359},{"Date":1468232417000,"T48A":1353,"T48B":1357},{"Date":1468232576000,"T48A":1353,"T48B":1355},{"Date":1468232693000,"T48A":1355,"T48B":1360},{"Date":1468232845000,"T48A":1355,"T48B":1355},{"Date":1468232966000,"T48A":1353,"T48B":1359},{"Date":1468233083000,"T48A":1355,"T48B":1357}]' series-config='{"secondSerie":{"type":"line","name":"Load Forecast","x":"T48A","y":"Line","axis":{"id":"axis2","number":2,"side":"left"}}}' chart-extents='{"x":["dynamic","dynamic"],"y":["dynamic","dynamic"]}' event-data='[{"id":"123","label":"Fa Icon","x":"1334"},{"id":"456","label":"Unicode","x":"1342"},{"id":"789","label":"Default","x":"1346"}]' event-config='{"Fa Icon":{"color":"blue","icon":"fa-camera","type":"fa","offset":[0,0]},"Unicode":{"color":"green","icon":"","type":"unicode","offset":[1,0]},"Event Png":{"icon":"ge_logo.png","type":"image","offset":[0,-20],"size":"20"}}' x-axis-config='{"title":"Time","labelPosition":"center","orientation":"bottom"}' y-axis-config='{"title":"Kw","labelPosition":"center","orientation":"left"}' time-data="Date" dynamic-menu-config='[{"name":"Delete","action":"function(data) {var conf = this.seriesConfig;delete conf[data.additionalDetail.name];this.set(\"seriesConfig\", {}); this.set(\"seriesConfig\", conf);","eventName":"delete","icon":"fa-trash"},{"name":"Bring To Front","action":"function(data) {this.set(\"serieToRedrawOnTop\", data.additionalDetail.name);}","eventName":"bring-to-front","icon":"fa-arrow-up"}]' toolbar-config='{"config":{"advancedZoom":true,"pan":true,"tooltip":true,"logHover":{"buttonGroup":2,"tooltipLabel":"The submenu item of this menu will define custom mouse interaction","icon":"fa-leaf","subConfig":{"customClick":{"icon":"fa-coffee","buttonGroup":3,"tooltipLabel":"define some custom mouse interactions on chart","eventName":"my-custom-click","actionConfig":{"mousedown":"function(mousePos) { console.log(\"custom click on chart. Context is the chart. Mouse pos is available: \" + JSON.stringify(mousePos))}","mouseup":"function(mousePos) { console.log(\"custom action on mouse up the chart \" + JSON.stringify(mousePos));}","mouseout":"function(mousePos) { console.log(\"custom action on mouse out the chart \" + JSON.stringify(mousePos));}","mousemove":"function(mousePos) { console.log(\"custom action on hovering the chart \");}"}},"customClick2":{"buttonGroup":3,"icon":"fa-fire-extinguisher","tooltipLabel":"Remove all custom interactions","actionConfig":{"mousedown":null,"mouseup":null,"mouseout":null,"mousemove":null}}}}}}' nav-height="100" nav-margin='{"top":5,"right":10,"bottom":20,"left":10}' nav-series-config='{"T48A":{"type":"line","name":"Trend","x":"Date","y":"T48A"}}'>
+            </px-vis-xy-chart>
 
         </template>
 
@@ -67,14 +49,6 @@
           Polymer({
             is: 'my-view5',
             properties: {
-              hourTitle : Array,
-              localValues: Array,
-              loading: {
-                 type: Boolean,
-                 readOnly: true,
-                 notify: true,
-                 value: false
-               },
               styles: {
                 type: Object,
                 value: {
@@ -110,8 +84,8 @@
               var collections = Object.keys(this.styles);
               //var parent = Polymer.dom(this).querySelector('#ajax');
               var parent = this.$.ajax;
-              //console.log ("PARENT NEXT");
-              //console.log (parent);
+              console.log ("PARENT NEXT");
+              console.log (parent);
 
               var ajaxCaller;
               for (var i = 0; i < collections.length; i++) {
@@ -122,15 +96,15 @@
                 ajaxCaller.method = 'GET';
                 this.listen(ajaxCaller, 'response', 'addLayer');
                 this.listen(ajaxCaller, 'error', 'reportError');
-                //console.log (ajaxCaller);
+                console.log (ajaxCaller);
                 parent.appendChild(ajaxCaller);
                 ajaxCaller.generateRequest();
               }
             },
             getStationData: function() {
               var parent = this.$.ajax;
-              //console.log ("PARENT NEXT");
-              //console.log (parent);
+              console.log ("PARENT NEXT");
+              console.log (parent);
 
               var ajaxCaller;
               ajaxCaller = document.createElement('iron-ajax');
@@ -140,7 +114,7 @@
               ajaxCaller.method = 'GET';
               this.listen(ajaxCaller, 'response', 'generateMapMarkers');
               this.listen(ajaxCaller, 'error', 'reportError');
-              //console.log (ajaxCaller);
+              console.log (ajaxCaller);
               parent.appendChild(ajaxCaller);
               ajaxCaller.generateRequest();
             },
@@ -148,36 +122,27 @@
             attached: function() {
               this.getMapData();
               this.getStationData();
-              var getHistory = this.$.getUtilisationData;
-              getHistory.generateRequest();
+              this.getBookingData();
             },
 
-            generateChartData: function(response) {
-              console.log ("IN GET CHART DATA");
-              //{"Date":1468213850000,"T48A":1332,"Line":1340}
-              //console.log (response.detail.response);
-              this.hourTitle = [];
-              this.localValues = [];
-              var dateTime = 1497312000000;
-              //var dateTime = new Date().getTime();
-              for (var i=0; i< response.detail.response.length; i ++) {
-                    var currentObject = response.detail.response[i];
-                    //[{"x":1397102460000,"y0":11.4403},{"x":1397139660000,"y0":13.1913},{"x":1397177400000,"y0":12.8485},{"x":1397228040000,"y0":10.975},{"x":1397248260000,"y0":12.9377},{"x":1397291280000,"y0":13.3795},{"x":1397522940000,"y0":16.4446},{"x":1397542800000,"y0":12.2771}]
+            getBookingData: function() {
+              var parent = this.$.ajax;
+              var ajaxCaller;
+              ajaxCaller = document.createElement('iron-ajax');
+              ajaxCaller.url = 'https://hackathon-booking-database.run.aws-usw02-pr.ice.predix.io/database/usage';
+              ajaxCaller.body = '{"startDate":"2017-JUN-13 14:22:00", "endDate":"2017-JUN-13 15:01:02"}';
+              ajaxCaller.contentType = 'application/json';
+              ajaxCaller.method = 'POST';
+              this.listen(ajaxCaller, 'response', 'generateChartData');
+              this.listen(ajaxCaller, 'error', 'reportError');
+              parent.appendChild(ajaxCaller);
+              ajaxCaller.generateRequest();
+            },
 
-                    console.log (dateTime);
-                    //var timestamp = Math.floor(dateTime / 1000);
-                    //console.log (timestamp);
-                    var actualtime = dateTime+(currentObject.hour *3600000);
-                    var pushObject = {"x":actualtime,"y0":currentObject.count}
-                  //console.log (pushObject);
-                  //  this.push ('localValues', currentObject.count);
-                    this.push ('hourTitle', pushObject);
-                  }
-                  console.log ("LOADED");
-                  console.log (this.hourTitle);
-            //  console.log (JSON.stringify(this.localValues));
-            //  this.useageData = JSON.stringify(this.localValues);
-            //  this.useageData = "[[24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24]]"
+            generateChartData: function(data) {
+              console.log(data.detail.response);
+
+
             },
 
             generateMapMarkers: function(data) {
